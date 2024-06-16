@@ -1,0 +1,72 @@
+{
+    "name": "encoredigitalgroup/mergemodels",
+    "description": "A Laravel package for Merging Eloquent Models",
+    "homepage": "https://github.com/EncoreDigitalGroup/mergemodels",
+    "license": "MIT",
+    "keywords": [
+        "Laravel",
+        "Merge Models"
+    ],
+    "authors": [
+        {
+            "name": "Encore Digital Group",
+            "homepage": "https://EncoreDigitalGroup.com",
+            "role": "Maintainer"
+        },
+        {
+            "name": "Ariel Vallese",
+            "email": "alariva@gmail.com",
+            "homepage": "https://alariva.com",
+            "role": "Original Developer"
+        }
+    ],
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "neronmoon/scriptsdev": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "require": {
+        "illuminate/support": "^11.0",
+        "illuminate/database": "^11.0",
+        "phpgenesis/common": "^0.2"
+    },
+    "require-dev": {
+        "larastan/larastan": "^2.9",
+        "orchestra/testbench": "^9.1",
+        "pestphp/pest": "^2.34",
+        "phpstan/extension-installer": "^1.4",
+        "rector/rector": "^1.1",
+        "tightenco/duster": "^3.0",
+        "tomasvotruba/cognitive-complexity": "^0.2.3",
+        "tomasvotruba/unused-public": "^0.3.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "EncoreDigitalGroup\\MergeModels\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EncoreDigitalGroup\\MergeModels\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "PHPGenesis\\Common\\Composer\\Scripts::postAutoloadDump"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EncoreDigitalGroup\\MergeModels\\Providers\\MergeModelsServiceProvider"
+            ],
+            "aliases": {
+                "ModelMerge": "EncoreDigitalGroup\\MergeModels\\Facades\\ModelMerge"
+            }
+        }
+    }
+}
