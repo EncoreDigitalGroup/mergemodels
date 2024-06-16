@@ -37,7 +37,7 @@ class ModelMergeRelationshipsTest extends BaseTestCase
 
         $mergedModel = $modelMerge->withRelationships(['sheeps'])
             ->setBase($oldestModel)
-            ->setDupe($newestModel)
+            ->setDuplicate($newestModel)
             ->merge();
 
         // Merge was correct
@@ -76,7 +76,7 @@ class ModelMergeRelationshipsTest extends BaseTestCase
 
         $mergedModel = $modelMerge->mustBelongToSame('owner')
             ->setBase($sheepWhiteDolly)
-            ->setDupe($sheepBlackDolly)
+            ->setDuplicate($sheepBlackDolly)
             ->unifyOnBase();
 
         // Relationships were untouched
@@ -104,7 +104,7 @@ class ModelMergeRelationshipsTest extends BaseTestCase
 
         $mergedModel = $modelMerge->mustBelongToSame('owner')
             ->setBase($sheepBaseDolly)
-            ->setDupe($sheepDupeDolly)
+            ->setDuplicate($sheepDupeDolly)
             ->unifyOnBase();
 
         // Merge was correct

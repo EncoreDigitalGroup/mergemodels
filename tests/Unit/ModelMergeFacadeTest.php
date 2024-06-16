@@ -12,7 +12,7 @@ class ModelMergeFacadeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John', 'age' => 33]);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
-        $mergedModel = MergeModels::setModelA($modelA)->setModelB($modelB)->merge();
+        $mergedModel = MergeModels::setBaseModel($modelA)->setDuplicateModel($modelB)->merge();
 
         $this->assertInstanceOf(Model::class, $mergedModel, 'Merged model should extend an Eloquent Model');
     }

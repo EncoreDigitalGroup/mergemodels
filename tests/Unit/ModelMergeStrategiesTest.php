@@ -13,7 +13,7 @@ class ModelMergeStrategiesTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
         $modelMerge = new ModelMerge(new MergeModelSimple);
-        $modelMerge->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->setBaseModel($modelA)->setDuplicateModel($modelB);
         $mergedModel = $modelMerge->merge();
 
         $this->assertEquals($mergedModel->firstname, 'John');

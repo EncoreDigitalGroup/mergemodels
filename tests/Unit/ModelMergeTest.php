@@ -15,7 +15,7 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
         $modelMerge = new ModelMerge();
-        $modelMerge->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->setBaseModel($modelA)->setDuplicateModel($modelB);
         $mergedModel = $modelMerge->merge();
 
         $this->assertInstanceOf(Model::class, $mergedModel, 'Merged model should extend an Eloquent Model');
@@ -27,7 +27,7 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
         $modelMerge = new ModelMerge();
-        $modelMerge->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->setBaseModel($modelA)->setDuplicateModel($modelB);
         $baseModel = $modelMerge->getBase();
 
         $this->assertInstanceOf(Model::class, $baseModel);
@@ -40,8 +40,8 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
         $modelMerge = new ModelMerge();
-        $modelMerge->setModelA($modelA)->setModelB($modelB);
-        $dupeModel = $modelMerge->getdupe();
+        $modelMerge->setBaseModel($modelA)->setDuplicateModel($modelB);
+        $dupeModel = $modelMerge->getDuplicate();
 
         $this->assertInstanceOf(Model::class, $dupeModel);
         $this->assertEquals($modelB, $dupeModel);
@@ -53,7 +53,7 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
         $modelMerge = new ModelMerge();
-        $modelMerge->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->setBaseModel($modelA)->setDuplicateModel($modelB);
         $mergedModel = $modelMerge->merge();
 
         $this->assertEquals($mergedModel->firstname, 'John');
@@ -69,7 +69,7 @@ class ModelMergeTest extends BaseTestCase
         $strategy = new MergeModelSimple();
 
         $modelMerge = new ModelMerge($strategy);
-        $modelMerge->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->setBaseModel($modelA)->setDuplicateModel($modelB);
         $mergedModel = $modelMerge->merge();
 
         $this->assertEquals($mergedModel->firstname, 'John');
@@ -83,7 +83,7 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Other', 'age' => 33, 'phone' => '+1 123 456 789']);
 
         $modelMerge = new ModelMerge(new MergeModelSimple());
-        $modelMerge->withKey(['firstname', 'lastname', 'age'])->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->withKey(['firstname', 'lastname', 'age'])->setBaseModel($modelA)->setDuplicateModel($modelB);
 
         $this->expectException(\EncoreDigitalGroup\MergeModels\Exceptions\ModelsNotDupeException::class);
 
@@ -96,7 +96,7 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Other', 'age' => 33, 'phone' => '+1 123 456 789']);
 
         $modelMerge = new ModelMerge(new MergeModelSimple());
-        $modelMerge->withKey('lastname')->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->withKey('lastname')->setBaseModel($modelA)->setDuplicateModel($modelB);
 
         $this->expectException(\EncoreDigitalGroup\MergeModels\Exceptions\ModelsNotDupeException::class);
 
@@ -109,7 +109,7 @@ class ModelMergeTest extends BaseTestCase
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33, 'phone' => '+1 123 456 789']);
 
         $modelMerge = new ModelMerge(new MergeModelSimple());
-        $modelMerge->withKey('lastname')->setModelA($modelA)->setModelB($modelB);
+        $modelMerge->withKey('lastname')->setBaseModel($modelA)->setDuplicateModel($modelB);
 
         $mergedModel = $modelMerge->merge();
 
@@ -124,7 +124,7 @@ class ModelMergeTest extends BaseTestCase
         $dupeModel = DummyContact::create(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33, 'phone' => '+1 123 456 789']);
 
         $modelMerge = new ModelMerge();
-        $baseModel = $modelMerge->setBase($baseModel)->setDupe($dupeModel)->unifyOnBase();
+        $baseModel = $modelMerge->setBase($baseModel)->setDuplicate($dupeModel)->unifyOnBase();
 
         // Merge was correct
         $this->assertEquals($baseModel->firstname, 'John');
@@ -153,7 +153,7 @@ class ModelMergeTest extends BaseTestCase
 
         $modelMerge = new ModelMerge();
 
-        $modelA = $modelMerge->setBase($oldestModel)->setDupe($newestModel)->preferNewest()->getBase();
+        $modelA = $modelMerge->setBase($oldestModel)->setDuplicate($newestModel)->preferNewest()->getBase();
 
         // Merge was correct
         $this->assertEquals($modelA->firstname, 'John');
@@ -175,7 +175,7 @@ class ModelMergeTest extends BaseTestCase
 
         $modelMerge = new ModelMerge();
 
-        $modelA = $modelMerge->setBase($oldestModel)->setDupe($newestModel)->preferOldest()->getBase();
+        $modelA = $modelMerge->setBase($oldestModel)->setDuplicate($newestModel)->preferOldest()->getBase();
 
         // Merge was correct
         $this->assertEquals($modelA->firstname, 'John');
@@ -197,7 +197,7 @@ class ModelMergeTest extends BaseTestCase
 
         $modelMerge = new ModelMerge();
 
-        $mergedModel = $modelMerge->setBase($oldestModel)->setDupe($newestModel)->swapPriority()->merge();
+        $mergedModel = $modelMerge->setBase($oldestModel)->setDuplicate($newestModel)->swapPriority()->merge();
 
         // Merge was correct
         $this->assertEquals($mergedModel->firstname, 'John');

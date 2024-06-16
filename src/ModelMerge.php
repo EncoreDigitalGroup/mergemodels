@@ -12,8 +12,8 @@ use LogicException;
 /** @api */
 class ModelMerge
 {
-    protected Model $modelA;
-    protected Model $modelB;
+    protected Model $baseModel;
+    protected Model $duplicateModel;
     protected ?MergeModelStrategy $strategy;
     protected ?array $keys = null;
     protected array $relationships = [];
@@ -40,62 +40,59 @@ class ModelMerge
      *
      * @return $this
      */
-    public function setModelA(Model $model): static
+    public function setBaseModel(Model $model): static
     {
-        $this->modelA = $model;
+        $this->baseModel = $model;
 
         return $this;
     }
 
-    public function getModelA(): Model
+    public function getBaseModel(): Model
     {
-        return $this->modelA;
+        return $this->baseModel;
     }
 
-    public function getModelB(): Model
+    public function getDuplicateModel(): Model
     {
-        return $this->modelB;
+        return $this->duplicateModel;
     }
 
     public function getBase(): Model
     {
-        return $this->getModelA();
+        return $this->getBaseModel();
     }
 
-    public function getDupe(): Model
+    public function getDuplicate(): Model
     {
-        return $this->getModelB();
+        return $this->getDuplicateModel();
     }
 
     /**
      * Set model B
-     *
-     *
-     * @return $this
      */
-    public function setModelB(Model $model): static
+    public function setDuplicateModel(Model $model): static
     {
-        $this->modelB = $model;
+        $this->duplicateModel = $model;
 
         return $this;
     }
 
     /**
-     * Alias for setModelA
+     * Alias for setBaseModel
      */
     public function setBase(Model $baseModel): static
     {
-        $this->setModelA($baseModel);
+        $this->setBaseModel($baseModel);
 
         return $this;
     }
 
     /**
-     * Alias for setModelB
+     * Alias for setDuplicateModel
      */
-    public function setDupe(Model $dupeModel): static
+    public function setDuplicate(Model $duplicateModel): static
     {
-        $this->setModelB($dupeModel);
+        $this->setDuplicateModel($duplicateModel);
 
         return $this;
     }
@@ -106,7 +103,7 @@ class ModelMerge
      * @param  string|array  $keys  Keys that make the model identifiable
      * @return $this
      */
-    public function withKey($keys): static
+    public function withKey(string|array $keys): static
     {
         if (is_array($keys)) {
             $this->keys = $keys;
@@ -120,7 +117,7 @@ class ModelMerge
     }
 
     /**
-     * Executes the merge for A and B Models
+     * Executes the merge for base and duplicate models
      */
     public function merge(): Model
     {
@@ -134,7 +131,7 @@ class ModelMerge
             throw new LogicException('Strategy must not be null');
         }
 
-        return $this->strategy->merge($this->modelA, $this->modelB);
+        return $this->strategy->merge($this->baseModel, $this->duplicateModel);
     }
 
     /**
@@ -144,13 +141,13 @@ class ModelMerge
     {
         $mergeModel = $this->merge();
 
-        $this->modelA->fill($mergeModel->toArray());
+        $this->baseModel->fill($mergeModel->toArray());
 
-        $this->modelA->save();
+        $this->baseModel->save();
 
-        $this->modelB->delete();
+        $this->duplicateModel->delete();
 
-        return $this->modelA;
+        return $this->baseModel;
     }
 
     /**
@@ -159,7 +156,7 @@ class ModelMerge
     public function preferOldest(): static
     {
         //@phpstan-ignore-next-line
-        if ($this->modelB->created_at < $this->modelA->created_at) {
+        if ($this->duplicateModel->created_at < $this->baseModel->created_at) {
             $this->swapPriority();
         }
 
@@ -172,7 +169,7 @@ class ModelMerge
     public function preferNewest(): static
     {
         // @phpstan-ignore-next-line
-        if ($this->modelB->created_at > $this->modelA->created_at) {
+        if ($this->duplicateModel->created_at > $this->baseModel->created_at) {
             $this->swapPriority();
         }
 
@@ -184,10 +181,10 @@ class ModelMerge
      */
     public function swapPriority(): static
     {
-        $tmp = $this->modelA;
+        $tmp = $this->baseModel;
 
-        $this->modelA = $this->modelB;
-        $this->modelB = $tmp;
+        $this->baseModel = $this->duplicateModel;
+        $this->duplicateModel = $tmp;
 
         return $this;
     }
@@ -223,8 +220,8 @@ class ModelMerge
 
     public function transferChilds(mixed $relationship): void
     {
-        foreach ($this->modelB->$relationship as $child) {
-            $this->modelA->$relationship()->save($child);
+        foreach ($this->duplicateModel->$relationship as $child) {
+            $this->baseModel->$relationship()->save($child);
         }
     }
 
@@ -234,8 +231,8 @@ class ModelMerge
             return;
         }
 
-        $dataA = $this->modelA->only($this->keys);
-        $dataB = $this->modelB->only($this->keys);
+        $dataA = $this->baseModel->only($this->keys);
+        $dataB = $this->duplicateModel->only($this->keys);
 
         if ($dataA != $dataB) {
             throw new ModelsNotDupeException('Models are not dupes', 1);
@@ -248,7 +245,7 @@ class ModelMerge
             return;
         }
 
-        if ($this->modelA->{$this->belongsTo} != $this->modelB->{$this->belongsTo}) {
+        if ($this->baseModel->{$this->belongsTo} != $this->duplicateModel->{$this->belongsTo}) {
             throw new ModelsBelongToDivergedParentsException('Models do not belong to same parent', 1);
         }
     }
