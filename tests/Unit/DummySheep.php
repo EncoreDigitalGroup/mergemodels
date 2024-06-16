@@ -2,9 +2,7 @@
 
 namespace EncoreDigitalGroup\MergeModels\Tests\Unit;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\DummyContact;
 
 /**
  * DummySheep is an example child model simulating a typical child relationship.

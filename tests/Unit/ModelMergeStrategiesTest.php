@@ -2,11 +2,8 @@
 
 namespace EncoreDigitalGroup\MergeModels\Tests\Unit;
 
-use EncoreDigitalGroup\MergeModels\MergeModel;
+use EncoreDigitalGroup\MergeModels\ModelMerge;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelSimple;
-use Illuminate\Database\Eloquent\Model;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\BaseTestCase;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\DummyContact;
 
 class ModelMergeStrategiesTest extends BaseTestCase
 {
@@ -15,7 +12,7 @@ class ModelMergeStrategiesTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John', 'age' => 33]);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
-        $modelMerge = new MergeModel(new MergeModelSimple);
+        $modelMerge = new ModelMerge(new MergeModelSimple);
         $modelMerge->setModelA($modelA)->setModelB($modelB);
         $mergedModel = $modelMerge->merge();
 

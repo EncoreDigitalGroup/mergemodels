@@ -2,11 +2,9 @@
 
 namespace EncoreDigitalGroup\MergeModels\Tests\Unit;
 
-use EncorDigitalGroup\MergeModels\MergeModel;
 use Carbon\Carbon;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\DummyContact;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\DummySheep;
-use Tests\TestCase as BaseTestCase;
+use EncoreDigitalGroup\MergeModels\Exceptions\ModelsBelongToDivergedParentsException;
+use EncoreDigitalGroup\MergeModels\ModelMerge;
 
 class ModelMergeRelationshipsTest extends BaseTestCase
 {
@@ -16,11 +14,13 @@ class ModelMergeRelationshipsTest extends BaseTestCase
             'lastname' => 'Doe',
             'age' => 33,
             'phone' => '+1 123 456 789',
-            'created_at' => Carbon::now(),]);
+            'created_at' => Carbon::now(),
+        ]);
         $newestModel = DummyContact::create(['firstname' => 'John',
             'lastname' => 'Doe',
             'age' => 33,
-            'created_at' => Carbon::now()->addDay(),]);
+            'created_at' => Carbon::now()->addDay(),
+        ]);
 
         $sheepDolly = DummySheep::make(['name' => 'Dolly', 'color' => 'white']);
         $sheepMolly = DummySheep::make(['name' => 'Molly', 'color' => 'gray']);
@@ -72,7 +72,7 @@ class ModelMergeRelationshipsTest extends BaseTestCase
         $this->assertEquals($shepherdJohn->sheeps()->count(), 1);
         $this->assertEquals($shepherdMatt->sheeps()->count(), 1);
 
-        $this->expectException(\EncoreDigitalGroup\MergeModels\Exceptions\ModelsBelongToDivergedParentsException::class);
+        $this->expectException(ModelsBelongToDivergedParentsException::class);
 
         $mergedModel = $modelMerge->mustBelongToSame('owner')
             ->setBase($sheepWhiteDolly)
@@ -98,7 +98,7 @@ class ModelMergeRelationshipsTest extends BaseTestCase
         $shepherd->sheeps()->save($sheepBaseDolly);
         $shepherd->sheeps()->save($sheepDupeDolly);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
 
         $this->assertEquals($shepherd->sheeps()->count(), 2);
 

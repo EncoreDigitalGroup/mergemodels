@@ -3,11 +3,7 @@
 namespace EncoreDigitalGroup\MergeModels\Tests\Unit;
 
 use EncoreDigitalGroup\MergeModels\Facades\MergeModels;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\BaseTestCase;
 use Illuminate\Database\Eloquent\Model;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\DummyContact;
-
-// use Tests\TestCase as BaseTestCase;
 
 class ModelMergeFacadeTest extends BaseTestCase
 {

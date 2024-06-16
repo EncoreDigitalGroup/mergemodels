@@ -2,7 +2,7 @@
 
 namespace EncoreDigitalGroup\MergeModels\Providers;
 
-use EncoreDigitalGroup\MergeModels\Facades\MergeModels;
+use EncoreDigitalGroup\MergeModels\ModelMerge;
 use Illuminate\Support\ServiceProvider;
 
 class MergeModelsServiceProvider extends ServiceProvider
@@ -38,7 +38,7 @@ class MergeModelsServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('mergemodels', function ($app) {
-            return new MergeModels;
+            return new ModelMerge;
         });
     }
 

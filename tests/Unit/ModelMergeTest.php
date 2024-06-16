@@ -2,11 +2,10 @@
 
 namespace EncoreDigitalGroup\MergeModels\Tests\Unit;
 
-use EncoreDigitalGroup\MergeModels\MergeModel;
-use EncoreDigitalGorup\MergeModels\Strategies\MergeModelSimple;
+use EncoreDigitalGroup\MergeModels\ModelMerge;
+use EncoreDigitalGroup\MergeModels\Strategies\MergeModelSimple;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use EncoreDigitalGroup\MergeModels\Tests\Unit\DummyContact;
 
 class ModelMergeTest extends BaseTestCase
 {
@@ -15,7 +14,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John']);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
         $modelMerge->setModelA($modelA)->setModelB($modelB);
         $mergedModel = $modelMerge->merge();
 
@@ -27,7 +26,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John']);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
         $modelMerge->setModelA($modelA)->setModelB($modelB);
         $baseModel = $modelMerge->getBase();
 
@@ -40,7 +39,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John']);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
         $modelMerge->setModelA($modelA)->setModelB($modelB);
         $dupeModel = $modelMerge->getdupe();
 
@@ -53,7 +52,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John', 'age' => 33]);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe']);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
         $modelMerge->setModelA($modelA)->setModelB($modelB);
         $mergedModel = $modelMerge->merge();
 
@@ -69,7 +68,7 @@ class ModelMergeTest extends BaseTestCase
 
         $strategy = new MergeModelSimple();
 
-        $modelMerge = new MergeModel($strategy);
+        $modelMerge = new ModelMerge($strategy);
         $modelMerge->setModelA($modelA)->setModelB($modelB);
         $mergedModel = $modelMerge->merge();
 
@@ -83,7 +82,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33]);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Other', 'age' => 33, 'phone' => '+1 123 456 789']);
 
-        $modelMerge = new MergeModel(new MergeModelSimple());
+        $modelMerge = new ModelMerge(new MergeModelSimple());
         $modelMerge->withKey(['firstname', 'lastname', 'age'])->setModelA($modelA)->setModelB($modelB);
 
         $this->expectException(\EncoreDigitalGroup\MergeModels\Exceptions\ModelsNotDupeException::class);
@@ -96,7 +95,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33]);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Other', 'age' => 33, 'phone' => '+1 123 456 789']);
 
-        $modelMerge = new MergeModel(new MergeModelSimple());
+        $modelMerge = new ModelMerge(new MergeModelSimple());
         $modelMerge->withKey('lastname')->setModelA($modelA)->setModelB($modelB);
 
         $this->expectException(\EncoreDigitalGroup\MergeModels\Exceptions\ModelsNotDupeException::class);
@@ -109,7 +108,7 @@ class ModelMergeTest extends BaseTestCase
         $modelA = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33]);
         $modelB = DummyContact::make(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33, 'phone' => '+1 123 456 789']);
 
-        $modelMerge = new MergeModel(new MergeModelSimple());
+        $modelMerge = new ModelMerge(new MergeModelSimple());
         $modelMerge->withKey('lastname')->setModelA($modelA)->setModelB($modelB);
 
         $mergedModel = $modelMerge->merge();
@@ -124,7 +123,7 @@ class ModelMergeTest extends BaseTestCase
         $baseModel = DummyContact::create(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33]);
         $dupeModel = DummyContact::create(['firstname' => 'John', 'lastname' => 'Doe', 'age' => 33, 'phone' => '+1 123 456 789']);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
         $baseModel = $modelMerge->setBase($baseModel)->setDupe($dupeModel)->unifyOnBase();
 
         // Merge was correct
@@ -143,14 +142,16 @@ class ModelMergeTest extends BaseTestCase
         $oldestModel = DummyContact::create(['firstname' => 'John',
             'lastname' => 'Doe',
             'age' => 33,
-            'created_at' => Carbon::now(),]);
+            'created_at' => Carbon::now(),
+        ]);
         $newestModel = DummyContact::create(['firstname' => 'John',
             'lastname' => 'Doe',
             'age' => 34,
             'phone' => '+1 123 456 789',
-            'created_at' => Carbon::now()->addDay(),]);
+            'created_at' => Carbon::now()->addDay(),
+        ]);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
 
         $modelA = $modelMerge->setBase($oldestModel)->setDupe($newestModel)->preferNewest()->getBase();
 
@@ -172,7 +173,7 @@ class ModelMergeTest extends BaseTestCase
             'phone' => '+1 123 456 789',
             'created_at' => Carbon::now()->addDay(),]);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
 
         $modelA = $modelMerge->setBase($oldestModel)->setDupe($newestModel)->preferOldest()->getBase();
 
@@ -194,7 +195,7 @@ class ModelMergeTest extends BaseTestCase
             'age' => 34,
             'created_at' => Carbon::now()->addDay(),]);
 
-        $modelMerge = new MergeModel();
+        $modelMerge = new ModelMerge();
 
         $mergedModel = $modelMerge->setBase($oldestModel)->setDupe($newestModel)->swapPriority()->merge();
 

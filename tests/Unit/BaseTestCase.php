@@ -45,14 +45,10 @@ abstract class BaseTestCase extends OrchestraTestCase
         });
     }
 
-    /**
-     * Load package service provider
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     */
-    protected function getPackageProviders(Application $app)
+    protected function getPackageProviders($app): array
     {
-        return [MergeModelsServiceProvider::class];
+        return [
+            MergeModelsServiceProvider::class,
+        ];
     }
 }

@@ -8,7 +8,7 @@ use EncoreDigitalGroup\MergeModels\Strategies\MergeModelSimple;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelStrategy;
 use Illuminate\Database\Eloquent\Model;
 
-class MergeModel
+class ModelMerge
 {
     protected Model $modelA;
 

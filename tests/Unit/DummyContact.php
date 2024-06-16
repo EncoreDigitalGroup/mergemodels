@@ -2,9 +2,7 @@
 
 namespace EncoreDigitalGroup\MergeModels\Tests\Unit;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use EncoreDigitaGroup\MergeModels\Tests\Unit\DummySheep;
 
 /**
  * DummyContact is an example model simulating a typical user contact.
