@@ -9,10 +9,8 @@ class MergeModelsServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -29,16 +27,14 @@ class MergeModelsServiceProvider extends ServiceProvider
 
     /**
      * Register any package services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../../config/mergemodels.php', 'mergemodels');
 
         // Register the service the package provides.
-        $this->app->singleton('mergemodels', function ($app) {
-            return new ModelMerge;
+        $this->app->singleton('mergemodels', function ($app): \EncoreDigitalGroup\MergeModels\ModelMerge {
+            return new ModelMerge();
         });
     }
 

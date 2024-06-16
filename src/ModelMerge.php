@@ -7,22 +7,19 @@ use EncoreDigitalGroup\MergeModels\Exceptions\ModelsNotDupeException;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelSimple;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelStrategy;
 use Illuminate\Database\Eloquent\Model;
+use LogicException;
 
+/** @api */
 class ModelMerge
 {
     protected Model $modelA;
-
     protected Model $modelB;
-
-    protected $strategy;
-
+    protected ?MergeModelStrategy $strategy;
     protected ?array $keys = null;
-
     protected array $relationships = [];
-
     protected ?string $belongsTo = null;
 
-    public function __construct($strategy = null)
+    public function __construct(?MergeModelStrategy $strategy = null)
     {
         $this->useStrategy($strategy);
     }
@@ -30,9 +27,9 @@ class ModelMerge
     /**
      * Pick a strategy class for merge operation.
      */
-    public function useStrategy(MergeModelStrategy $strategy = null)
+    public function useStrategy(?MergeModelStrategy $strategy = null): static
     {
-        $this->strategy = $strategy === null ? new MergeModelSimple() : $strategy;
+        $this->strategy = $strategy instanceof MergeModelStrategy ? $strategy : new MergeModelSimple();
 
         return $this;
     }
@@ -40,33 +37,32 @@ class ModelMerge
     /**
      * Set model A
      *
-     * @param Model $model
      *
-     * @return  $this
+     * @return $this
      */
-    public function setModelA(Model $model)
+    public function setModelA(Model $model): static
     {
         $this->modelA = $model;
 
         return $this;
     }
 
-    public function getModelA()
+    public function getModelA(): Model
     {
         return $this->modelA;
     }
 
-    public function getModelB()
+    public function getModelB(): Model
     {
         return $this->modelB;
     }
 
-    public function getBase()
+    public function getBase(): Model
     {
         return $this->getModelA();
     }
 
-    public function getDupe()
+    public function getDupe(): Model
     {
         return $this->getModelB();
     }
@@ -74,11 +70,10 @@ class ModelMerge
     /**
      * Set model B
      *
-     * @param Model $model
      *
-     * @return  $this
+     * @return $this
      */
-    public function setModelB(Model $model)
+    public function setModelB(Model $model): static
     {
         $this->modelB = $model;
 
@@ -87,10 +82,8 @@ class ModelMerge
 
     /**
      * Alias for setModelA
-     *
-     * @param Model $baseModel
      */
-    public function setBase($baseModel)
+    public function setBase(Model $baseModel): static
     {
         $this->setModelA($baseModel);
 
@@ -99,10 +92,8 @@ class ModelMerge
 
     /**
      * Alias for setModelB
-     *
-     * @param Model $dupeModel
      */
-    public function setDupe($dupeModel)
+    public function setDupe(Model $dupeModel): static
     {
         $this->setModelB($dupeModel);
 
@@ -112,11 +103,10 @@ class ModelMerge
     /**
      * Specify a compound key to match models and verify identity.
      *
-     * @param string|array $keys Keys that make the model identifiable
-     *
+     * @param  string|array  $keys  Keys that make the model identifiable
      * @return $this
      */
-    public function withKey($keys)
+    public function withKey($keys): static
     {
         if (is_array($keys)) {
             $this->keys = $keys;
@@ -131,10 +121,8 @@ class ModelMerge
 
     /**
      * Executes the merge for A and B Models
-     *
-     * @return Illuminate\Database\Eloquent\Model The model A with merged attributes from model B
      */
-    public function merge()
+    public function merge(): Model
     {
         $this->validateKeys();
 
@@ -142,15 +130,17 @@ class ModelMerge
 
         $this->transferRelationships();
 
+        if (is_null($this->strategy)) {
+            throw new LogicException('Strategy must not be null');
+        }
+
         return $this->strategy->merge($this->modelA, $this->modelB);
     }
 
     /**
      * Executes the merge and performs save/delete accordingly to preserve base and discard dupe
-     *
-     * @return Illuminate\Database\Eloquent\Model The model A (base)
      */
-    public function unifyOnBase()
+    public function unifyOnBase(): Model
     {
         $mergeModel = $this->merge();
 
@@ -165,11 +155,10 @@ class ModelMerge
 
     /**
      * Prefer the oldest of the models to be preserved
-     *
-     * @return $this
      */
-    public function preferOldest()
+    public function preferOldest(): static
     {
+        //@phpstan-ignore-next-line
         if ($this->modelB->created_at < $this->modelA->created_at) {
             $this->swapPriority();
         }
@@ -179,11 +168,10 @@ class ModelMerge
 
     /**
      * Prefer the newest of the models to be preserved
-     *
-     * @return $this
      */
-    public function preferNewest()
+    public function preferNewest(): static
     {
+        // @phpstan-ignore-next-line
         if ($this->modelB->created_at > $this->modelA->created_at) {
             $this->swapPriority();
         }
@@ -193,10 +181,8 @@ class ModelMerge
 
     /**
      * Swap models from base to dupe and vice versa
-     *
-     * @return $this
      */
-    public function swapPriority()
+    public function swapPriority(): static
     {
         $tmp = $this->modelA;
 
@@ -206,7 +192,7 @@ class ModelMerge
         return $this;
     }
 
-    public function belongsTo($belongsTo = null)
+    public function belongsTo(?string $belongsTo = null): static
     {
         $this->belongsTo = $belongsTo;
 
@@ -215,37 +201,34 @@ class ModelMerge
 
     /**
      * Alias for belongsTo
-     *
-     * @param string $belongsTo Relationship name
-     * @return $this
      */
-    public function mustBelongToSame($belongsTo = null)
+    public function mustBelongToSame(?string $belongsTo = null): static
     {
         return $this->belongsTo($belongsTo);
     }
 
-    public function withRelationships(array $relationships)
+    public function withRelationships(array $relationships): static
     {
         $this->relationships = $relationships;
 
         return $this;
     }
 
-    public function transferRelationships()
+    public function transferRelationships(): void
     {
         foreach ($this->relationships as $relationship) {
             $this->transferChilds($relationship);
         }
     }
 
-    public function transferChilds($relationship)
+    public function transferChilds(mixed $relationship): void
     {
         foreach ($this->modelB->$relationship as $child) {
             $this->modelA->$relationship()->save($child);
         }
     }
 
-    protected function validateKeys()
+    protected function validateKeys(): void
     {
         if ($this->keys === null) {
             return;
@@ -259,7 +242,7 @@ class ModelMerge
         }
     }
 
-    protected function validateBelongsToSameParent()
+    protected function validateBelongsToSameParent(): void
     {
         if ($this->belongsTo === null) {
             return;

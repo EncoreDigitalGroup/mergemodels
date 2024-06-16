@@ -4,9 +4,7 @@ namespace EncoreDigitalGroup\MergeModels\Exceptions;
 
 use Exception;
 
-/**
- * ModelsNotDupeException
- */
+/** @api */
 class ModelsNotDupeException extends Exception
 {
     // ...

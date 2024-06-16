@@ -4,9 +4,7 @@ namespace EncoreDigitalGroup\MergeModels\Exceptions;
 
 use Exception;
 
-/**
- * ModelsBelongToDivergedParentsException
- */
+/** @api */
 class ModelsBelongToDivergedParentsException extends Exception
 {
     // ...

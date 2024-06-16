@@ -2,11 +2,12 @@
 
 namespace EncoreDigitalGroup\MergeModels\Strategies;
 
-use EncoreDigitalGroup\MergeModels\Strategies\MergeModelStrategy;
+use Illuminate\Database\Eloquent\Model;
 
+/** @api */
 class MergeModelSimple implements MergeModelStrategy
 {
-    public function merge($modelA, $modelB)
+    public function merge(Model $modelA, Model $modelB): Model
     {
         $dataA = $modelA->toArray();
         $dataB = $modelB->toArray();
