@@ -15,7 +15,7 @@ jobs:
         permissions:
             contents: write
         with:
-            generateReleaseNotes: true
-            isDraft: false
+            generate_release_notes: true
+            is_draft: false
         secrets:
             token: ${{ secrets.GITHUB_TOKEN }}
