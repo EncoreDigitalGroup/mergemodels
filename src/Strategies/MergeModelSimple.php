@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 /** @api */
 class MergeModelSimple implements MergeModelStrategy
 {
-    public function merge(Model $modelA, Model $modelB): Model
+    public function merge(Model $baseModel, Model $duplicateModel): Model
     {
-        $dataA = $modelA->toArray();
-        $dataB = $modelB->toArray();
+        $base = $baseModel->toArray();
+        $duplicate = $duplicateModel->toArray();
 
-        $dataMerge = array_merge($dataB, $dataA);
+        $dataMerge = array_merge($duplicate, $base);
 
-        $modelA->fill($dataMerge);
+        $baseModel->fill($dataMerge);
 
-        return $modelA;
+        return $baseModel;
     }
 }
