@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 interface MergeModelStrategy
 {
-    public function merge(Model $modelA, Model $modelB): Model;
+    public function merge(Model $baseModel, Model $duplicateModel): Model;
 }

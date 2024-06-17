@@ -29,17 +29,15 @@ class ModelMerge
      */
     public function useStrategy(?MergeModelStrategy $strategy = null): static
     {
-        $this->strategy = $strategy instanceof MergeModelStrategy ? $strategy : new MergeModelSimple();
+        if ($strategy instanceof MergeModelStrategy) {
+            $this->strategy = $strategy;
+        } else {
+            $this->strategy = new MergeModelSimple();
+        }
 
         return $this;
     }
 
-    /**
-     * Set model A
-     *
-     *
-     * @return $this
-     */
     public function setBaseModel(Model $model): static
     {
         $this->baseModel = $model;
@@ -47,19 +45,36 @@ class ModelMerge
         return $this;
     }
 
+    public function setBase(Model $baseModel): static
+    {
+        return $this->setBaseModel($baseModel);
+    }
+
     public function getBaseModel(): Model
     {
         return $this->baseModel;
     }
 
-    public function getDuplicateModel(): Model
-    {
-        return $this->duplicateModel;
-    }
-
     public function getBase(): Model
     {
         return $this->getBaseModel();
+    }
+
+    public function setDuplicateModel(Model $model): static
+    {
+        $this->duplicateModel = $model;
+
+        return $this;
+    }
+
+    public function setDuplicate(Model $duplicateModel): static
+    {
+        return $this->setDuplicateModel($duplicateModel);
+    }
+
+    public function getDuplicateModel(): Model
+    {
+        return $this->duplicateModel;
     }
 
     public function getDuplicate(): Model
@@ -68,40 +83,7 @@ class ModelMerge
     }
 
     /**
-     * Set model B
-     */
-    public function setDuplicateModel(Model $model): static
-    {
-        $this->duplicateModel = $model;
-
-        return $this;
-    }
-
-    /**
-     * Alias for setBaseModel
-     */
-    public function setBase(Model $baseModel): static
-    {
-        $this->setBaseModel($baseModel);
-
-        return $this;
-    }
-
-    /**
-     * Alias for setDuplicateModel
-     */
-    public function setDuplicate(Model $duplicateModel): static
-    {
-        $this->setDuplicateModel($duplicateModel);
-
-        return $this;
-    }
-
-    /**
      * Specify a compound key to match models and verify identity.
-     *
-     * @param  string|array  $keys  Keys that make the model identifiable
-     * @return $this
      */
     public function withKey(string|array $keys): static
     {
@@ -135,7 +117,7 @@ class ModelMerge
     }
 
     /**
-     * Executes the merge and performs save/delete accordingly to preserve base and discard dupe
+     * Executes the merge and performs save/delete accordingly to preserve base and discard duplicate
      */
     public function unifyOnBase(): Model
     {
@@ -197,7 +179,7 @@ class ModelMerge
     }
 
     /**
-     * Alias for belongsTo
+     * @alias belongsTo
      */
     public function mustBelongToSame(?string $belongsTo = null): static
     {
@@ -214,11 +196,11 @@ class ModelMerge
     public function transferRelationships(): void
     {
         foreach ($this->relationships as $relationship) {
-            $this->transferChilds($relationship);
+            $this->transferChildren($relationship);
         }
     }
 
-    public function transferChilds(mixed $relationship): void
+    public function transferChildren(mixed $relationship): void
     {
         foreach ($this->duplicateModel->$relationship as $child) {
             $this->baseModel->$relationship()->save($child);
