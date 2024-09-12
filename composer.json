@@ -37,7 +37,7 @@
     "require-dev": {
         "larastan/larastan": "^2.9",
         "orchestra/testbench": "^9.1",
-        "pestphp/pest": "^2.34",
+        "pestphp/pest": "^3.0",
         "phpstan/extension-installer": "^1.4",
         "rector/rector": "^1.1",
         "tightenco/duster": "^3.0",
