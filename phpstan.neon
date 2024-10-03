@@ -8,10 +8,6 @@ parameters:
     ignoreErrors:
         - identifier: missingType.iterableValue
         - identifier: missingType.generics
-    unused_public:
-        methods: true
-        properties: true
-        constants: true
     cognitive_complexity:
         class: 50
         function: 10
