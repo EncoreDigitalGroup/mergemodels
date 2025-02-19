@@ -32,7 +32,7 @@
     "require": {
         "illuminate/support": "^11.0",
         "illuminate/database": "^11.0",
-        "phpgenesis/common": "^0.2"
+        "phpgenesis/common": "^0.3"
     },
     "require-dev": {
         "larastan/larastan": "^2.9",
