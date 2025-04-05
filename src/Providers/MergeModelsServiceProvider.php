@@ -34,7 +34,7 @@ class MergeModelsServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('mergemodels', function ($app): \EncoreDigitalGroup\MergeModels\ModelMerge {
-            return new ModelMerge();
+            return new ModelMerge;
         });
     }
 
