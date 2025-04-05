@@ -32,7 +32,7 @@ class ModelMerge
         if ($strategy instanceof MergeModelStrategy) {
             $this->strategy = $strategy;
         } else {
-            $this->strategy = new MergeModelSimple();
+            $this->strategy = new MergeModelSimple;
         }
 
         return $this;
@@ -202,8 +202,8 @@ class ModelMerge
 
     public function transferChildren(mixed $relationship): void
     {
-        foreach ($this->duplicateModel->$relationship as $child) {
-            $this->baseModel->$relationship()->save($child);
+        foreach ($this->duplicateModel->{$relationship} as $child) {
+            $this->baseModel->{$relationship}()->save($child);
         }
     }
 
