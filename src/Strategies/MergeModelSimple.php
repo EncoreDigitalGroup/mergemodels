@@ -9,9 +9,8 @@ class MergeModelSimple implements MergeModelStrategy
 {
     public function merge(Model $baseModel, Model $duplicateModel): Model
     {
-        $base = $baseModel->toArray();
-        $duplicate = $duplicateModel->toArray();
-
+        $base = $baseModel->getAttributes();
+        $duplicate = $duplicateModel->getAttributes();
         $dataMerge = array_merge($duplicate, $base);
 
         $baseModel->fill($dataMerge);

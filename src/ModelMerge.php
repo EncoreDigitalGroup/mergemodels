@@ -8,6 +8,7 @@ use EncoreDigitalGroup\MergeModels\Mergers\BelongsToManyMerger;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelSimple;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelStrategy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 use LogicException;
 
@@ -115,7 +116,12 @@ class ModelMerge
             throw new LogicException('Strategy must not be null');
         }
 
-        return $this->strategy->merge($this->baseModel, $this->duplicateModel);
+
+        $merged = $this->strategy->merge($this->baseModel, $this->duplicateModel);
+
+        // dd($this->baseModel, $this->duplicateModel, $merged);
+
+        return $merged;
     }
 
     /**
@@ -125,9 +131,13 @@ class ModelMerge
     {
         $mergeModel = $this->merge();
 
-        $this->baseModel->fill($mergeModel->toArray());
+        // dd($mergeModel);
+
+        $this->baseModel->fill($mergeModel->getAttributes());
 
         $this->baseModel->save();
+
+        dd($this->baseModel);
 
         $this->duplicateModel->delete();
 
@@ -208,8 +218,12 @@ class ModelMerge
 
     public function transferChildren(mixed $relationship): void
     {
-        foreach ($this->duplicateModel->{$relationship} as $child) {
-            $this->baseModel->{$relationship}()->save($child);
+        $relationInstance = $this->duplicateModel->{$relationship}();
+
+        if ($relationInstance instanceof HasMany) {
+            foreach ($this->duplicateModel->{$relationship} as $child) {
+                $this->baseModel->{$relationship}()->save($child);
+            }
         }
     }
 

@@ -4,6 +4,9 @@ namespace EncoreDigitalGroup\MergeModels\Mergers;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use ReflectionClass;
+use ReflectionMethod;
+use Throwable;
 
 class BelongsToManyMerger
 {
@@ -21,25 +24,18 @@ class BelongsToManyMerger
      */
     public function transfer(Model $baseModel, Model $duplicateModel): void
     {
-        // Get all BelongsToMany relationships from duplicateModel
         $relationships = $this->getBelongsToManyRelationships($duplicateModel);
 
         foreach ($relationships as $relationship) {
-            // Get the relationship method name
-            $method = $relationship->getMethodName();
-
-            // Get the BelongsToMany relationship instance
+            $method = $relationship->name;
             $relation = $duplicateModel->$method();
 
             if ($relation instanceof BelongsToMany) {
-                // Get the related model IDs and pivot data
                 $relatedIds = $duplicateModel->$method->pluck('id')->toArray();
                 $pivotData = $this->getPivotData($relation, $duplicateModel);
 
-                // Sync relationships to baseModel
                 $baseModel->$method()->sync($relatedIds);
 
-                // Update pivot data if exists
                 if (!empty($pivotData)) {
                     $this->updatePivotData($baseModel->$method(), $pivotData);
                 }
@@ -57,11 +53,9 @@ class BelongsToManyMerger
     {
         $relationships = [];
 
-        // Get all public methods of the model
-        $methods = (new \ReflectionClass($model))->getMethods(\ReflectionMethod::IS_PUBLIC);
+        $methods = (new ReflectionClass($model))->getMethods(ReflectionMethod::IS_PUBLIC);
 
         foreach ($methods as $method) {
-            // Skip methods that belong to parent classes
             if ($method->getDeclaringClass()->getName() !== get_class($model)) {
                 continue;
             }
@@ -72,8 +66,7 @@ class BelongsToManyMerger
                 if ($return instanceof BelongsToMany) {
                     $relationships[] = $method;
                 }
-            } catch (\Exception $e) {
-                // Skip methods that throw exceptions or aren't relationships
+            } catch (Throwable $e) {
                 continue;
             }
         }
@@ -94,10 +87,13 @@ class BelongsToManyMerger
 
         // Get all related models with pivot data
         $related = $relation->get()->mapWithKeys(function ($item) {
-            return [$item->getKey() => $item->pivot->getAttributes()];
+            return [$item->getKey() => $item->pivot?->getAttributes()];
         })->toArray();
 
         foreach ($related as $relatedId => $attributes) {
+            if(is_null($attributes)) {
+                continue;
+            }
             // Only include pivot attributes that aren't primary/foreign keys
             $pivotData[$relatedId] = array_filter($attributes, function ($key) use ($relation) {
                 return !in_array($key, [
