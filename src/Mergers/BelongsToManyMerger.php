@@ -39,6 +39,8 @@ class BelongsToManyMerger
                 if (!empty($pivotData)) {
                     $this->updatePivotData($baseModel->$method(), $pivotData);
                 }
+
+                $duplicateModel->$method()->detach();
             }
         }
     }
