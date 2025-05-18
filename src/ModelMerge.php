@@ -4,9 +4,11 @@ namespace EncoreDigitalGroup\MergeModels;
 
 use EncoreDigitalGroup\MergeModels\Exceptions\ModelsBelongToDivergedParentsException;
 use EncoreDigitalGroup\MergeModels\Exceptions\ModelsNotDupeException;
+use EncoreDigitalGroup\MergeModels\Mergers\BelongsToManyMerger;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelSimple;
 use EncoreDigitalGroup\MergeModels\Strategies\MergeModelStrategy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use LogicException;
 
 /** @api */
@@ -195,9 +197,13 @@ class ModelMerge
 
     public function transferRelationships(): void
     {
-        foreach ($this->relationships as $relationship) {
-            $this->transferChildren($relationship);
-        }
+        DB::transaction(function () {
+            BelongsToManyMerger::make()->transfer($this->baseModel, $this->duplicateModel);
+
+            foreach ($this->relationships as $relationship) {
+                $this->transferChildren($relationship);
+            }
+        });
     }
 
     public function transferChildren(mixed $relationship): void
