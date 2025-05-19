@@ -40,6 +40,10 @@ class BelongsToManyMerger
                     $this->updatePivotData($baseModel->$method(), $pivotData);
                 }
 
+                /**
+                 * TODO:    It was staring me right in the face. Instead of detaching, we should
+                 *          probably be transferring the relation to the base model.
+                 */
                 $duplicateModel->$method()->detach();
             }
         }
