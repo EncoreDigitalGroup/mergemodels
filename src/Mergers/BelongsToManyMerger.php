@@ -87,7 +87,6 @@ class BelongsToManyMerger
     {
         $pivotData = [];
 
-        // Get all related models with pivot data
         $related = $relation->get()->mapWithKeys(function ($item) {
             return [$item->getKey() => $item->pivot?->getAttributes()];
         })->toArray();
@@ -96,7 +95,7 @@ class BelongsToManyMerger
             if(is_null($attributes)) {
                 continue;
             }
-            // Only include pivot attributes that aren't primary/foreign keys
+
             $pivotData[$relatedId] = array_filter($attributes, function ($key) use ($relation) {
                 return !in_array($key, [
                     $relation->getForeignPivotKeyName(),
