@@ -116,12 +116,7 @@ class ModelMerge
             throw new LogicException('Strategy must not be null');
         }
 
-
-        $merged = $this->strategy->merge($this->baseModel, $this->duplicateModel);
-
-        // dd($this->baseModel, $this->duplicateModel, $merged);
-
-        return $merged;
+        return $this->strategy->merge($this->baseModel, $this->duplicateModel);
     }
 
     /**
@@ -131,14 +126,8 @@ class ModelMerge
     {
         $mergeModel = $this->merge();
 
-        // dd($mergeModel);
-
         $this->baseModel->fill($mergeModel->getAttributes());
-
         $this->baseModel->save();
-
-        dd($this->baseModel);
-
         $this->duplicateModel->delete();
 
         return $this->baseModel;
