@@ -1133,16 +1133,16 @@
         },
         {
             "name": "encoredigitalgroup/stdlib",
-            "version": "v2.11.1",
+            "version": "v2.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EncoreDigitalGroup/stdlib.git",
-                "reference": "fa41d3d0a7a7e6d3837b94c7e5901688b0f768fc"
+                "reference": "8ca8a8d73ddc872dfa39184941e948071126e40a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EncoreDigitalGroup/stdlib/zipball/fa41d3d0a7a7e6d3837b94c7e5901688b0f768fc",
-                "reference": "fa41d3d0a7a7e6d3837b94c7e5901688b0f768fc",
+                "url": "https://api.github.com/repos/EncoreDigitalGroup/stdlib/zipball/8ca8a8d73ddc872dfa39184941e948071126e40a",
+                "reference": "8ca8a8d73ddc872dfa39184941e948071126e40a",
                 "shasum": ""
             },
             "require": {
@@ -1156,7 +1156,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.6",
-                "pestphp/pest": "^2.34 || ^3.0",
+                "pestphp/pest": "^2.34 || ^3.0 || ^4.0",
                 "phpstan/extension-installer": "^1.3",
                 "phpstan/phpstan": "^1.10",
                 "rector/rector": "^1.0",
@@ -1185,9 +1185,9 @@
             "description": "A collection of standard library classes and functions for PHP.",
             "support": {
                 "issues": "https://github.com/EncoreDigitalGroup/stdlib/issues",
-                "source": "https://github.com/EncoreDigitalGroup/stdlib/tree/v2.11.1"
+                "source": "https://github.com/EncoreDigitalGroup/stdlib/tree/v2.12.1"
             },
-            "time": "2025-08-26T00:55:36+00:00"
+            "time": "2025-09-03T17:22:58+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1735,16 +1735,16 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "6.5.1",
+            "version": "6.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jsonrainbow/json-schema.git",
-                "reference": "b5ab21e431594897e5bb86343c01f140ba862c26"
+                "reference": "ac0d369c09653cf7af561f6d91a705bc617a87b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/b5ab21e431594897e5bb86343c01f140ba862c26",
-                "reference": "b5ab21e431594897e5bb86343c01f140ba862c26",
+                "url": "https://api.github.com/repos/jsonrainbow/json-schema/zipball/ac0d369c09653cf7af561f6d91a705bc617a87b8",
+                "reference": "ac0d369c09653cf7af561f6d91a705bc617a87b8",
                 "shasum": ""
             },
             "require": {
@@ -1804,9 +1804,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jsonrainbow/json-schema/issues",
-                "source": "https://github.com/jsonrainbow/json-schema/tree/6.5.1"
+                "source": "https://github.com/jsonrainbow/json-schema/tree/6.5.2"
             },
-            "time": "2025-08-29T10:58:11+00:00"
+            "time": "2025-09-09T09:42:27+00:00"
         },
         {
             "name": "laravel/framework",
@@ -3219,16 +3219,16 @@
         },
         {
             "name": "phpgenesis/common",
-            "version": "v1.1.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPGenesis/Common.git",
-                "reference": "c75f4a0bbf549250edeca3d6573d4f4e00213454"
+                "reference": "1c1047e1158171f2da9ada9550077555aca6db32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPGenesis/Common/zipball/c75f4a0bbf549250edeca3d6573d4f4e00213454",
-                "reference": "c75f4a0bbf549250edeca3d6573d4f4e00213454",
+                "url": "https://api.github.com/repos/PHPGenesis/Common/zipball/1c1047e1158171f2da9ada9550077555aca6db32",
+                "reference": "1c1047e1158171f2da9ada9550077555aca6db32",
                 "shasum": ""
             },
             "require": {
@@ -3258,9 +3258,9 @@
             ],
             "description": "Shared Functionality for PHPGenesis",
             "support": {
-                "source": "https://github.com/PHPGenesis/Common/tree/v1.1.0"
+                "source": "https://github.com/PHPGenesis/Common/tree/v1.2.1"
             },
-            "time": "2025-08-10T00:50:20+00:00"
+            "time": "2025-09-07T18:55:19+00:00"
         },
         {
             "name": "phpoption/phpoption",
