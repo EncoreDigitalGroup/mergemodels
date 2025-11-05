@@ -1132,16 +1132,16 @@
         },
         {
             "name": "encoredigitalgroup/stdlib",
-            "version": "v2.14.3",
+            "version": "v2.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EncoreDigitalGroup/stdlib.git",
-                "reference": "5f7382809a1897341fd5957f5d2b735026e141a6"
+                "reference": "be6831d003d5a589639729e953c8bdd4badeec6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EncoreDigitalGroup/stdlib/zipball/5f7382809a1897341fd5957f5d2b735026e141a6",
-                "reference": "5f7382809a1897341fd5957f5d2b735026e141a6",
+                "url": "https://api.github.com/repos/EncoreDigitalGroup/stdlib/zipball/be6831d003d5a589639729e953c8bdd4badeec6f",
+                "reference": "be6831d003d5a589639729e953c8bdd4badeec6f",
                 "shasum": ""
             },
             "require": {
@@ -1184,9 +1184,9 @@
             "description": "A collection of standard library classes and functions for PHP.",
             "support": {
                 "issues": "https://github.com/EncoreDigitalGroup/stdlib/issues",
-                "source": "https://github.com/EncoreDigitalGroup/stdlib/tree/v2.14.3"
+                "source": "https://github.com/EncoreDigitalGroup/stdlib/tree/v2.16.1"
             },
-            "time": "2025-10-01T15:13:57+00:00"
+            "time": "2025-11-03T13:22:44+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -3221,7 +3221,7 @@
         },
         {
             "name": "phpgenesis/common",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPGenesis/Common.git",
@@ -3260,7 +3260,7 @@
             ],
             "description": "Shared Functionality for PHPGenesis",
             "support": {
-                "source": "https://github.com/PHPGenesis/Common/tree/v1.6.0"
+                "source": "https://github.com/PHPGenesis/Common/tree/v1.6.1"
             },
             "time": "2025-10-26T16:19:08+00:00"
         },
