@@ -30,8 +30,8 @@
         }
     },
     "require": {
-        "illuminate/support": "^11|^12",
-        "illuminate/database": "^11|^12",
+        "illuminate/support": "^11|^12|^13",
+        "illuminate/database": "^11|^12|^13",
         "phpgenesis/common": "^1.0"
     },
     "require-dev": {
@@ -56,7 +56,8 @@
     "scripts": {
         "post-autoload-dump": [
             "PHPGenesis\\Common\\Composer\\Scripts::postAutoloadDump"
-        ]
+        ],
+        "test": "vendor/bin/pest --parallel"
     },
     "extra": {
         "laravel": {
